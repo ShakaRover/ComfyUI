@@ -17,9 +17,25 @@ def load_extra_path_config(yaml_path):
             base_path = os.path.expandvars(os.path.expanduser(base_path))
             if not os.path.isabs(base_path):
                 base_path = os.path.abspath(os.path.join(yaml_dir, base_path))
+
+
         is_default = False
         if "is_default" in conf:
             is_default = conf.pop("is_default")
+
+        if is_default:
+            if base_path:
+                folder_paths.base_path = base_path
+                folder_paths.models_dir = os.path.join(base_path, "models")
+            if "output_dir" in conf:
+                folder_paths.output_directory = os.path.join(base_path, conf.pop("output_dir"))
+            if "temp_dir" in conf:
+                folder_paths.temp_directory = os.path.join(base_path, conf.pop("temp_dir"))
+            if "input_dir" in conf:
+                folder_paths.input_directory = os.path.join(base_path, conf.pop("input_dir"))
+            if "user_dir" in conf:
+                folder_paths.user_directory = os.path.join(base_path, conf.pop("user_dir"))
+
         for x in conf:
             for y in conf[x].split("\n"):
                 if len(y) == 0:
